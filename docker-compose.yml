@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: transcoder
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d transcoder"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./storage:/storage
+      - ./backend:/app
+    environment:
+      DATABASE_URL: postgresql://user:password@postgres:5432/transcoder
+      REDIS_URL: redis://redis:6379/0
+
+  worker-1:
+    build: ./backend
+    command: celery -A app.tasks worker --loglevel=info --hostname=worker-1@%h
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./storage:/storage
+      - ./backend:/app
+    environment:
+      DATABASE_URL: postgresql://user:password@postgres:5432/transcoder
+      REDIS_URL: redis://redis:6379/0
+
+  worker-2:
+    build: ./backend
+    command: celery -A app.tasks worker --loglevel=info --hostname=worker-2@%h
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./storage:/storage
+      - ./backend:/app
+    environment:
+      DATABASE_URL: postgresql://user:password@postgres:5432/transcoder
+      REDIS_URL: redis://redis:6379/0
+
+  worker-3:
+    build: ./backend
+    command: celery -A app.tasks worker --loglevel=info --hostname=worker-3@%h
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./storage:/storage
+      - ./backend:/app
+    environment:
+      DATABASE_URL: postgresql://user:password@postgres:5432/transcoder
+      REDIS_URL: redis://redis:6379/0
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+
+volumes:
+  postgres_data:
