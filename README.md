@@ -9,6 +9,8 @@ A scalable video transcoding system that processes videos into multiple resoluti
 - **Real-time Progress Tracking**: Live updates via WebSocket polling showing job status, worker assignments, and completion percentage
 - **Distributed Job Queue**: Redis-backed Celery queue with automatic task distribution and retry logic
 - **Responsive UI**: Modern Next.js dashboard with progress visualization and video playback
+<img width="2280" height="1416" alt="image" src="https://github.com/user-attachments/assets/88850ec0-97b0-4346-b643-b71a9edf8bab" />
+<img width="2318" height="1616" alt="image" src="https://github.com/user-attachments/assets/c8c32c5f-0c34-4d08-a31a-5058bd52e1b4" />
 
 ## Tech Stack
 
@@ -81,6 +83,8 @@ User downloads completed videos
 - Supports videos up to 500MB
 - Sub-second latency for progress updates
 - File size reduction: Original → 1080p (-15%), 720p (-45%), 480p (-70%), 360p (-85%), 240p (-95%)
+<img width="2306" height="1624" alt="image" src="https://github.com/user-attachments/assets/580e397a-848e-4e1d-abf5-ba75f047bff1" />
+<img width="2260" height="1624" alt="image" src="https://github.com/user-attachments/assets/0c35f293-edca-4e43-94e3-bbb5b7516446" />
 
 ## Future Enhancements
 
