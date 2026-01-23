@@ -1,6 +1,7 @@
 # StreamForge - Distributed Video Transcoding Pipeline
 
 A scalable video transcoding system that processes videos into multiple resolutions using distributed worker pools, built with FastAPI, Celery, and Next.js.
+<img width="2268" height="1254" alt="image" src="https://github.com/user-attachments/assets/640f6057-99e9-45c6-8a2f-19045461bca7" />
 
 ## Features
 
